@@ -44,7 +44,7 @@ export default function App() {
         )}
 
         {hasContent ? (
-          <Preview component={component} error={error} zoom={zoom} />
+          <Preview component={component} error={error} zoom={zoom} isDark={isDark} />
         ) : (
           <DropZone onOpenFile={openFileDialog} isDragging={isDragging} />
         )}

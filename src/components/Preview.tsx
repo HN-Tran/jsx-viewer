@@ -47,9 +47,39 @@ interface PreviewProps {
   component: React.ComponentType | null;
   error: string | null;
   zoom: number;
+  isDark: boolean;
 }
 
-export function Preview({ component: Component, error, zoom }: PreviewProps) {
+export function Preview({ component: Component, error, zoom, isDark }: PreviewProps) {
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!Component || !previewRef.current) return;
+
+    // Remove any existing emoji-reinvert spans (cleanup for mode switch)
+    for (const el of previewRef.current.querySelectorAll(".emoji-reinvert")) {
+      const parent = el.parentNode!;
+      while (el.firstChild) parent.insertBefore(el.firstChild, el);
+      parent.removeChild(el);
+    }
+
+    if (!isDark) return;
+
+    let rafId: number;
+    const run = () => {
+      rafId = requestAnimationFrame(() => wrapEmojiTextNodes(previewRef.current!));
+    };
+    run();
+    const observer = new MutationObserver((mutations) => {
+      const selfCaused = mutations.every(
+        (m) => m.addedNodes.length === 1 && (m.addedNodes[0] as HTMLElement)?.classList?.contains("emoji-reinvert")
+      );
+      if (!selfCaused) run();
+    });
+    observer.observe(previewRef.current, { childList: true, subtree: true });
+    return () => { observer.disconnect(); cancelAnimationFrame(rafId); };
+  }, [Component, isDark]);
+
   if (error) {
     return (
       <div className="flex items-center justify-center h-full p-8">
@@ -75,35 +105,17 @@ export function Preview({ component: Component, error, zoom }: PreviewProps) {
 
   if (!Component) return null;
 
-  const previewRef = useRef<HTMLDivElement>(null);
-  const isDark = document.documentElement.classList.contains("dark");
-
-  useEffect(() => {
-    if (!Component || !isDark || !previewRef.current) return;
-    let rafId: number;
-    const run = () => {
-      rafId = requestAnimationFrame(() => wrapEmojiTextNodes(previewRef.current!));
-    };
-    run();
-    const observer = new MutationObserver((mutations) => {
-      const selfCaused = mutations.every(
-        (m) => m.addedNodes.length === 1 && (m.addedNodes[0] as HTMLElement)?.classList?.contains("emoji-reinvert")
-      );
-      if (!selfCaused) run();
-    });
-    observer.observe(previewRef.current, { childList: true, subtree: true });
-    return () => { observer.disconnect(); cancelAnimationFrame(rafId); };
-  }, [Component, isDark]);
-
   return (
     <ErrorBoundary key={Component.toString()}>
       <div
         ref={previewRef}
-        className="p-6 dark:invert dark:hue-rotate-180"
+        className="p-6 bg-white"
         style={{
           transform: `scale(${zoom})`,
           transformOrigin: "top left",
           width: `${100 / zoom}%`,
+          color: "black",
+          ...(isDark ? { filter: "invert(1) hue-rotate(180deg)" } : {}),
         }}
       >
         <Component />

@@ -41,7 +41,9 @@ body {
 /* Native form controls: re-invert to cancel the parent's invert filter,
    then use color-scheme: dark so the OS renders them in dark mode natively.
    This fixes dropdown popups, emoji rendering, and text colors. */
-.dark select {
+.dark select,
+.dark input,
+.dark textarea {
   filter: invert(1) hue-rotate(180deg);
   color-scheme: dark;
 }
