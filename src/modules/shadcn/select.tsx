@@ -36,7 +36,7 @@ export function SelectTrigger({ className, children, ...props }: React.ButtonHTM
   return (
     <button
       className={cn(
-        "flex h-9 w-full items-center justify-between rounded-md border border-gray-200 dark:border-gray-700 bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-white dark:ring-offset-gray-800 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-950 dark:focus:ring-gray-300 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-100",
+        "flex h-9 w-full items-center justify-between rounded-md border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       onClick={() => ctx.setOpen(!ctx.open)}
@@ -76,7 +76,7 @@ export function SelectContent({ className, children, ...props }: React.HTMLAttri
     <div
       ref={ref}
       className={cn(
-        "absolute z-50 mt-1 max-h-60 min-w-[8rem] overflow-auto rounded-md border dark:border-gray-700 bg-white dark:bg-gray-800 p-1 text-gray-900 dark:text-gray-100 shadow-md",
+        "absolute z-50 mt-1 max-h-60 min-w-[8rem] overflow-auto rounded-md border bg-white p-1 text-gray-900 shadow-md",
         className,
       )}
       {...props}
@@ -96,8 +96,8 @@ export function SelectItem({
   return (
     <div
       className={cn(
-        "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 px-2 text-sm outline-none hover:bg-gray-100 dark:hover:bg-gray-700",
-        ctx.value === value && "bg-gray-100 dark:bg-gray-700",
+        "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 px-2 text-sm outline-none hover:bg-gray-100",
+        ctx.value === value && "bg-gray-100",
         className,
       )}
       onClick={() => {

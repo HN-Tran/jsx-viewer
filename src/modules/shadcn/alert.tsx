@@ -3,12 +3,12 @@ import { cn } from "./utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-gray-900 dark:[&>svg]:text-gray-100 [&>svg~*]:pl-7",
+  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-gray-900 [&>svg~*]:pl-7",
   {
     variants: {
       variant: {
-        default: "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100",
-        destructive: "border-red-500/50 text-red-500 dark:text-red-400 [&>svg]:text-red-500 dark:[&>svg]:text-red-400",
+        default: "bg-white text-gray-900",
+        destructive: "border-red-500/50 text-red-500 [&>svg]:text-red-500",
       },
     },
     defaultVariants: {

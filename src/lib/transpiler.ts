@@ -16,6 +16,40 @@ function importRewritePlugin() {
         const source = path.node.source.value;
         const specifiers = path.node.specifiers;
 
+        // Skip react import — React is already provided in the eval scope
+        if (source === "react") {
+          const declarations: any[] = [];
+          for (const s of specifiers) {
+            if (s.type === "ImportDefaultSpecifier" || s.type === "ImportNamespaceSpecifier") {
+              // import React from "react" or import * as React — already in scope, skip
+              continue;
+            }
+            if (s.type === "ImportSpecifier") {
+              // import { useState } from "react" → const { useState } = React
+              declarations.push({
+                type: "VariableDeclaration",
+                kind: "const",
+                declarations: [{
+                  type: "VariableDeclarator",
+                  id: { type: "Identifier", name: s.local.name },
+                  init: {
+                    type: "MemberExpression",
+                    object: { type: "Identifier", name: "React" },
+                    property: { type: "Identifier", name: s.imported.name },
+                    computed: false,
+                  },
+                }],
+              });
+            }
+          }
+          if (declarations.length > 0) {
+            path.replaceWithMultiple(declarations);
+          } else {
+            path.remove();
+          }
+          return;
+        }
+
         if (specifiers.length === 0) {
           // Side-effect import: import "foo" → __require("foo")
           path.replaceWith({
@@ -255,7 +289,12 @@ export function transpile(source: string, filename: string): TranspileResult | T
       return { code: null, error: "Babel returned no output" };
     }
 
-    return { code: result.code, error: null };
+    // Strip Tailwind dark: variant classes from transpiled output.
+    // The preview uses CSS invert() for dark mode, so user dark: classes
+    // cause double-inversion (dark style + invert = light again).
+    const code = result.code.replace(/ ?dark:[a-zA-Z0-9_./[\]&>:!-]+/g, "");
+
+    return { code, error: null };
   } catch (e: any) {
     return { code: null, error: e.message || String(e) };
   }

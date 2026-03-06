@@ -59,14 +59,14 @@ export function DialogContent({ className, children, ...props }: React.HTMLAttri
       <div className="fixed inset-0 bg-black/80" onClick={() => ctx.setOpen(false)} />
       <div
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-lg border bg-white dark:bg-gray-800 p-6 shadow-lg",
+          "relative z-50 w-full max-w-lg rounded-lg border bg-white p-6 shadow-lg",
           className,
         )}
         {...props}
       >
         {children}
         <button
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white dark:ring-offset-gray-800 transition-opacity hover:opacity-100 dark:text-gray-400"
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100"
           onClick={() => ctx.setOpen(false)}
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +93,7 @@ export function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHe
 }
 
 export function DialogDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn("text-sm text-gray-500 dark:text-gray-400", className)} {...props} />;
+  return <p className={cn("text-sm text-gray-500", className)} {...props} />;
 }
 
 export function DialogClose({

@@ -1,5 +1,47 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ErrorBoundary } from "./ErrorBoundary";
+
+const EMOJI_SPLIT_RE = /(\p{Emoji_Presentation}[\u{FE00}-\u{FE0F}\u{200D}\p{Emoji_Presentation}\p{Emoji_Component}]*|\p{Emoji}\uFE0F[\u{200D}\p{Emoji_Presentation}\p{Emoji_Component}]*)/gu;
+
+function wrapEmojiTextNodes(root: HTMLElement) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes: Text[] = [];
+  while (walker.nextNode()) {
+    const node = walker.currentNode as Text;
+    if (node.parentElement?.classList.contains("emoji-reinvert")) continue;
+    if (EMOJI_SPLIT_RE.test(node.data)) {
+      EMOJI_SPLIT_RE.lastIndex = 0;
+      textNodes.push(node);
+    }
+  }
+  for (const node of textNodes) {
+    const parts = node.data.split(EMOJI_SPLIT_RE).filter(Boolean);
+    if (parts.length <= 1 && EMOJI_SPLIT_RE.test(node.data)) {
+      EMOJI_SPLIT_RE.lastIndex = 0;
+      const span = document.createElement("span");
+      span.className = "emoji-reinvert";
+      span.style.filter = "invert(1) hue-rotate(180deg)";
+      node.parentNode!.insertBefore(span, node);
+      span.appendChild(node);
+      continue;
+    }
+    const frag = document.createDocumentFragment();
+    for (const part of parts) {
+      EMOJI_SPLIT_RE.lastIndex = 0;
+      if (EMOJI_SPLIT_RE.test(part)) {
+        EMOJI_SPLIT_RE.lastIndex = 0;
+        const span = document.createElement("span");
+        span.className = "emoji-reinvert";
+        span.style.filter = "invert(1) hue-rotate(180deg)";
+        span.textContent = part;
+        frag.appendChild(span);
+      } else {
+        frag.appendChild(document.createTextNode(part));
+      }
+    }
+    node.parentNode!.replaceChild(frag, node);
+  }
+}
 
 interface PreviewProps {
   component: React.ComponentType | null;
@@ -33,9 +75,30 @@ export function Preview({ component: Component, error, zoom }: PreviewProps) {
 
   if (!Component) return null;
 
+  const previewRef = useRef<HTMLDivElement>(null);
+  const isDark = document.documentElement.classList.contains("dark");
+
+  useEffect(() => {
+    if (!Component || !isDark || !previewRef.current) return;
+    let rafId: number;
+    const run = () => {
+      rafId = requestAnimationFrame(() => wrapEmojiTextNodes(previewRef.current!));
+    };
+    run();
+    const observer = new MutationObserver((mutations) => {
+      const selfCaused = mutations.every(
+        (m) => m.addedNodes.length === 1 && (m.addedNodes[0] as HTMLElement)?.classList?.contains("emoji-reinvert")
+      );
+      if (!selfCaused) run();
+    });
+    observer.observe(previewRef.current, { childList: true, subtree: true });
+    return () => { observer.disconnect(); cancelAnimationFrame(rafId); };
+  }, [Component, isDark]);
+
   return (
     <ErrorBoundary key={Component.toString()}>
       <div
+        ref={previewRef}
         className="p-6 dark:invert dark:hue-rotate-180"
         style={{
           transform: `scale(${zoom})`,

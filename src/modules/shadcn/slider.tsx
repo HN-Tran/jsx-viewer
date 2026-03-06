@@ -22,7 +22,7 @@ export const Slider = React.forwardRef<
       step={step}
       value={current}
       onChange={(e) => onValueChange?.([Number(e.target.value)])}
-      className={cn("w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer", className)}
+      className={cn("w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer", className)}
       {...props}
     />
   );

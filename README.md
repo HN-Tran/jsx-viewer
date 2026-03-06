@@ -1,7 +1,7 @@
 # JSX Viewer
 
-[![CI](https://github.com/HN-Tran/jsx-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/HN-Tran/jsx-viewer/actions/workflows/ci.yml)
-[![Release](https://github.com/HN-Tran/jsx-viewer/actions/workflows/release.yml/badge.svg)](https://github.com/HN-Tran/jsx-viewer/actions/workflows/release.yml)
+[![CI](https://github.com/HN-Tran/jsx-viewer/actions/workflows/check.yml/badge.svg)](https://github.com/HN-Tran/jsx-viewer/actions/workflows/check.yml)
+[![Release](https://github.com/HN-Tran/jsx-viewer/actions/workflows/publish.yml/badge.svg)](https://github.com/HN-Tran/jsx-viewer/actions/workflows/publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A lightweight desktop app to preview JSX and TSX files. Drag and drop a `.jsx` or `.tsx` file and see it rendered instantly — no setup, no dev server, no configuration.

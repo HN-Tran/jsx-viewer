@@ -37,7 +37,7 @@ export function TabsList({ className, children, ...props }: React.HTMLAttributes
   return (
     <div
       className={cn(
-        "inline-flex h-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 p-1 text-gray-500 dark:text-gray-400",
+        "inline-flex h-9 items-center justify-center rounded-lg bg-gray-100 p-1 text-gray-500",
         className,
       )}
       {...props}
@@ -58,8 +58,8 @@ export function TabsTrigger({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-white dark:ring-offset-gray-800 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:focus-visible:ring-gray-300 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-        isActive && "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow",
+        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        isActive && "bg-white text-gray-900 shadow",
         className,
       )}
       onClick={() => ctx.onValueChange(value)}
@@ -81,7 +81,7 @@ export function TabsContent({
   return (
     <div
       className={cn(
-        "mt-2 ring-offset-white dark:ring-offset-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:focus-visible:ring-gray-300 focus-visible:ring-offset-2",
+        "mt-2 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2",
         className,
       )}
       {...props}
