@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# AI agent files
+CLAUDE.md
+AGENTS.md
+.claude/
+.cursor/
+.cursorrules
+.github/copilot-instructions.md
+.aider*
+.codeium/
+.continue/
+.windsurf/
+
+# Cache
+*.tsbuildinfo
+.cache/
+.parcel-cache/

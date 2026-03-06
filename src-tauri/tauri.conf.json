@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicksenger/tauri/dev/crates/tauri-cli/schema.json",
+  "productName": "JSX Viewer",
+  "version": "0.1.0",
+  "identifier": "com.jsx-viewer.desktop",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "JSX Viewer",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "theme": "Light"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/icon.png",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {}
+
+}
